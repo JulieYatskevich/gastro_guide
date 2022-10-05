@@ -37,22 +37,22 @@ class ReviewUserSerializer(serializers.ModelSerializer):
 
 
 class ReviewRestaurantSerializer(serializers.ModelSerializer):
-    user = ReviewUserSerializer(read_only=True, default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Restaurant
-        fields = ['id', 'user']
+        fields = ['id', 'owner']
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    reviewer = serializers.HiddenField(default=serializers.CurrentUserDefault())
     restaurant = ReviewRestaurantSerializer(read_only=True)
+    user = ReviewUserSerializer(read_only=True, default=serializers.CurrentUserDefault())
+    user_id = serializers.IntegerField(read_only=True)
     restaurant_id = serializers.IntegerField()
     review = serializers.CharField(allow_blank=True)
 
     class Meta:
         model = Review
-        fields = ['id', 'review', 'rating', 'restaurant', 'reviewer', 'restaurant_id', 'reviewer_id', 'date_visited']
+        fields = ['id', 'user', 'review', 'rating', 'restaurant', 'reviewer', 'restaurant_id', 'reviewer_id', 'user_id', 'date_visited']
 
 
 class MenuListSerializer(serializers.ModelSerializer):
